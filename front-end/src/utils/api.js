@@ -98,6 +98,7 @@
  }
  
  export async function updateTable(reservationId, table_id, signal) {
+   console.log(table_id)
    const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
    return await fetchJson(url, {
      headers,

@@ -147,8 +147,16 @@ async function reservationExists(req, res, next) {
   }
 }
 
+async function read(req, res,){
+  const data = res.locals.reservation;
+  res.status(200).json({
+    data,
+  })
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validationReservation, asyncErrorBoundary(create)],
-  reservationExists: [hasReservationId, reservationExists]
+  reservationExists: [hasReservationId, reservationExists],
+  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)]
 };

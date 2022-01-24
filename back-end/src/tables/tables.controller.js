@@ -131,7 +131,7 @@ function isOccupied(req, res, next) {
 }
 
 async function occupy(req, res) {
-    console.log("DEBUG FINISH");
+    //console.log("DEBUG FINISH");
     console.log(res.locals.table);
   const data = await service.occupy(res.locals.table);
 
