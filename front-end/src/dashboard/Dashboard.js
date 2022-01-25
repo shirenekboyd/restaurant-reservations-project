@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservation, listTable } from "../utils/api";
+import { listReservation, listTable, updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
+import Finish from "./Finish";
 //import {formatTime} from "../utils/format-reservation-time";
 //import formatAsDate from "../utils/format-reservation-date";
 import {
@@ -62,42 +63,63 @@ function Dashboard({ date }) {
     pushDate(nextOrPrev);
   }
 
-  const reservationsTable = reservations.map((reservation) => {
-    return (
-      <div>
-        <div>
-          <tr>
-            <th scope="row">1</th>
+  function statusChanger(reservation_id, status) {
+    const abortController = new AbortController();
+    updateStatus(reservation_id, status, abortController.signal).catch(
+      setErrors
+    );
+    return () => abortController.abort();
+  }
 
-            <td>{reservation.first_name}</td>
-            <td>{reservation.last_name}</td>
-            <td>{reservation.mobile_number}</td>
-            <td>{formatAsDate(reservation.reservation_date)}</td>
-            <td>{formatAsTime(reservation.reservation_time)}</td>
-            <td>{reservation.people}</td>
-          </tr>
-          <a className="btn btn-primary"
-             href={`/reservations/${reservation.reservation_id}/seat`}>
-              Seat
-          </a>
-        </div>
-      </div>
+  const reservationsTable = reservations.map((reservation) => {
+    const { reservation_id } = reservation;
+    return (
+      <tr>
+        <td scope="row">{reservation_id}</td>
+
+        <td>{reservation.first_name}</td>
+        <td>{reservation.last_name}</td>
+        <td>{reservation.mobile_number}</td>
+
+        <td>{formatAsDate(reservation.reservation_date)}</td>
+        <td>{formatAsTime(reservation.reservation_time)}</td>
+
+        <td>{reservation.people}</td>
+
+        <td>{reservation.status}</td>
+        <td>
+          {reservation.status === "booked" ? (
+            <a
+              className="btn btn-primary"
+              href={`/reservations/${reservation.reservation_id}/seat`}
+            >
+              <button
+                onClick={(e) =>
+                  statusChanger(reservation.reservation_id, "seated")
+                }
+                type="button"
+                class="btn btn-light"
+              >
+                Seat
+              </button>
+            </a>
+          ) : null}
+        </td>
+      </tr>
     );
   });
 
   //include within the function below "Free" or "Occupied" depending on whether a reservation is seated at the table.
   const displayTables = tables.map((table, index) => {
     return (
-      <div key={index}>
-        <div>
-          <tr>
-            <th scope="row">{table.table_id}</th>
-            <td>{table.table_name}</td>
-            <td>{table.capacity}</td>
-            <td data-table-id-status={table.table_id}></td>
-          </tr>
-        </div>
-      </div>
+      <tr key={index}>
+        <th scope="row">{table.table_id}</th>
+        <td>{table.table_name}</td>
+        <td>{table.capacity}</td>
+        <td data-table-id-status={table.table_id}>
+          {table.reservation_id ? <Finish table_id={table.table_id} /> : "Free"}
+        </td>
+      </tr>
     );
   });
 
@@ -117,6 +139,8 @@ function Dashboard({ date }) {
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
                 <th scope="col">People</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             {reservationsTable}

@@ -107,4 +107,32 @@
      body: JSON.stringify({ data: { reservation_id: reservationId } }),
    });
  }
+
+ export async function deleteTable(table_id, signal){
+   const url = new URL (`${API_BASE_URL}/tables/${table_id}/seat`);
+   return await fetchJson(url, {
+    headers,
+    signal,
+    method: "DELETE",
+  });
+ }
+
+ export async function updateStatus(reservation_id, status, signal){
+   const url = new URL (`${API_BASE_URL}/reservations/${reservation_id}/status`);
+   return await fetchJson(url, {
+    headers,
+    signal,
+    method: "PUT",
+    body: JSON.stringify({ data: { status } })
+  });
+ }
+
+ export async function search(mobile_number, signal){
+   const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${mobile_number}`);
+   return await fetchJson(url, {
+    headers,
+    signal,
+    method: "GET",
+   })
+ }
  

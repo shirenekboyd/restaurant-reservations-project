@@ -21,8 +21,18 @@ function today() {
  */
 
 async function list(req, res) {
-  const data = await service.list(req.query.date);
+  let data = await service.list(req.query.date);
+  data = data.filter((reservation) => reservation.status !== "finished")
   res.json({ data });
+}
+
+async function checkMobileNumber(req, res, next){
+  const { mobile_number } = req.query;
+  if (mobile_number){
+    const data = await service.search(mobile_number);
+    return res.status(200).json({data})
+  }
+  next();
 }
 
 async function create(req, res, next) {
@@ -58,6 +68,13 @@ function validationReservation(req, res, next) {
       });
     }
   });
+
+  if(data.status === "seated" || data.status === "finished"){
+    return next({
+      status: 400,
+      message: `Status cannot be ${data.status}`,
+    });
+}
 
   if (!Number.isInteger(data.people)) {
     return next({
@@ -154,9 +171,29 @@ async function read(req, res,){
   })
 }
 
+async function update(req, res, next) {
+  const {reservation_id} = req.params;
+  const data = await service.update(reservation_id, req.body.data.status);
+  res.status(200).json({data})
+}
+
+async function validateStatus(req, res, next){
+  const status = req.body.data.status
+  const {reservation_id} = req.params
+  const checkReservation = await service.read(reservation_id)
+  if (checkReservation.status === "finished"){
+    next({ status: 400, message: `A finished reservation cannot be updated.` });
+  }
+ if (status !== "seated" && status !== "booked" && status !== "finished"){
+    return next({ status: 400, message: `Invalid status: ${status}` });
+  }
+   next()
+}
+
 module.exports = {
-  list: [asyncErrorBoundary(list)],
+  list: [asyncErrorBoundary(checkMobileNumber), asyncErrorBoundary(list)],
   create: [validationReservation, asyncErrorBoundary(create)],
   reservationExists: [hasReservationId, reservationExists],
-  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)]
+  read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
+  update: [hasReservationId, reservationExists, validateStatus, asyncErrorBoundary(update)]
 };
