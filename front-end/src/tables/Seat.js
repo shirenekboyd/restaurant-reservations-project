@@ -25,8 +25,12 @@ function Seat() {
     let abortController = new AbortController();
     async function assignTable() {
       try {
-        console.log(selectTable)
-        await updateTable(reservation_id, selectTable.table_id, abortController.signal);
+        console.log(selectTable);
+        await updateTable(
+          reservation_id,
+          selectTable.table_id,
+          abortController.signal
+        );
         history.push(`/dashboard`);
       } catch (error) {
         setError(error);
@@ -46,11 +50,13 @@ function Seat() {
   }
 
   const tableOptions = table.map((table) => {
-    return (
-      <option value={table.table_id} key={table.table_id}>
-        {table.table_name} - {table.capacity}
-      </option>
-    );
+    if (!table.reservation_id) {
+      return (
+        <option value={table.table_id} key={table.table_id}>
+          {table.table_name} - {table.capacity}
+        </option>
+      );
+    }
   });
 
   return (

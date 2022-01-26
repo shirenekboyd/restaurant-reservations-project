@@ -184,10 +184,15 @@ async function validateStatus(req, res, next){
   if (checkReservation.status === "finished"){
     next({ status: 400, message: `A finished reservation cannot be updated.` });
   }
- if (status !== "seated" && status !== "booked" && status !== "finished"){
+ if (status !== "seated" && status !== "booked" && status !== "finished" && status !== "cancelled"){
     return next({ status: 400, message: `Invalid status: ${status}` });
   }
    next()
+}
+
+async function updateReservation(req, res, next){
+  const data = await service.updateReservation(req.body.data)
+  res.status(200).json({ data })
 }
 
 module.exports = {
@@ -195,5 +200,6 @@ module.exports = {
   create: [validationReservation, asyncErrorBoundary(create)],
   reservationExists: [hasReservationId, reservationExists],
   read: [hasReservationId, reservationExists, asyncErrorBoundary(read)],
-  update: [hasReservationId, reservationExists, validateStatus, asyncErrorBoundary(update)]
+  update: [hasReservationId, reservationExists, validateStatus, asyncErrorBoundary(update)],
+  updateReservation: [validationReservation, hasReservationId, reservationExists, asyncErrorBoundary(updateReservation)]
 };

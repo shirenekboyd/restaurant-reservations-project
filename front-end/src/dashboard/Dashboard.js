@@ -4,6 +4,7 @@ import { listReservation, listTable, updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import Finish from "./Finish";
+import Edit from "../edit/Edit";
 //import {formatTime} from "../utils/format-reservation-time";
 //import formatAsDate from "../utils/format-reservation-date";
 import {
@@ -76,33 +77,39 @@ function Dashboard({ date }) {
     return (
       <tr>
         <td scope="row">{reservation_id}</td>
-
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>
         <td>{reservation.mobile_number}</td>
-
         <td>{formatAsDate(reservation.reservation_date)}</td>
         <td>{formatAsTime(reservation.reservation_time)}</td>
-
         <td>{reservation.people}</td>
-
         <td>{reservation.status}</td>
         <td>
           {reservation.status === "booked" ? (
-            <a
+            <div>
+            
+              <button
+                // onClick={(e) =>
+                //   statusChanger(reservation.reservation_id, "seated")
+                // }
+                type="button"
+                className="btn btn-light"
+              >
+                <a
               className="btn btn-primary"
               href={`/reservations/${reservation.reservation_id}/seat`}
             >
-              <button
-                onClick={(e) =>
-                  statusChanger(reservation.reservation_id, "seated")
-                }
-                type="button"
-                class="btn btn-light"
-              >
                 Seat
+                </a>  
               </button>
-            </a>
+              
+              <a
+                className="btn btn-primary"
+                href={`/reservations/${reservation.reservation_id}/edit`}
+              >
+                Edit
+              </a>
+              </div>
           ) : null}
         </td>
       </tr>

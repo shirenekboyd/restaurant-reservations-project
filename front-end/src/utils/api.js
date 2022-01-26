@@ -123,7 +123,7 @@
     headers,
     signal,
     method: "PUT",
-    body: JSON.stringify({ data: { status } })
+    body: JSON.stringify({ data: { status }})
   });
  }
 
@@ -136,3 +136,21 @@
    })
  }
  
+ export async function getReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: "GET",
+   })
+ }
+
+ export async function updateReservation(reservation, reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: "PUT",
+    body: JSON.stringify({ data: reservation })
+  });
+ }
