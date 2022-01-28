@@ -7,6 +7,7 @@ function hasValidFields(req, res, next) {
   const validFields = new Set([
     "table_name",
     "capacity",
+    "reservation_id",
   ]);
 
   const invalidFields = Object.keys(data).filter(

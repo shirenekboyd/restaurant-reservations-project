@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 function Tables({ onFinish, tables = [] }) {
   const history = useHistory();
-  function finishHandler({
+  async function finishHandler({
     target: { dataset: { tableIdFinish, reservationIdFinish } } = {},
   }) {
     if (
@@ -14,10 +14,8 @@ function Tables({ onFinish, tables = [] }) {
         "Is this table ready to seat new guests? This cannot be undone."
       )
     ) {
-      //finishTable(tableIdFinish, reservationIdFinish);
-      onFinish(tableIdFinish, reservationIdFinish);
-      // deleteTable(table_id)
-      history.push("/");
+      await onFinish(tableIdFinish, reservationIdFinish);
+      //history.push("/");
     }
   }
 
@@ -29,23 +27,21 @@ function Tables({ onFinish, tables = [] }) {
           <td>{table.table_name}</td>
           <td>{table.capacity}</td>
           <td data-table-id-status={table.table_id}>
+            {table.reservation_id ? "Occupied" : "Free"}
+          </td>
+          <td>
+            {" "}
             {table.reservation_id ? (
-              <div>
-                Occupied
-                <button
-                  type="button"
-                  className="btn btn-outline-info"
-                  data-table-id-finish={table.table_id}
-                  data-reservation-id-finish={table.reservation_id}
-                  onClick={finishHandler}
-                >
-                  Finish
-                </button>
-              </div>
-            ) : (
-              "Free"
-            )}
-            {/* {table.reservation_id ? <Finish table_id={table.table_id} /> : "Free"} */}
+              <button
+                type="button"
+                className="btn btn-outline-info"
+                data-table-id-finish={table.table_id}
+                data-reservation-id-finish={table.reservation_id}
+                onClick={finishHandler}
+              >
+                Finish
+              </button>
+            ) : null}
           </td>
         </tr>
       );
@@ -62,6 +58,7 @@ function Tables({ onFinish, tables = [] }) {
             <th scope="col">Table Name</th>
             <th scope="col">Capacity</th>
             <th scope="col">Free?</th>
+            <th scope="col">Clear Table</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>

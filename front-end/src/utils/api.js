@@ -124,7 +124,7 @@
     method: "DELETE",
     headers,
   };
-  return await fetchJson(url, options, {});
+  return fetchJson(url, options, {});
 }
 
 export async function cancelReservation(reservationId, signal) {

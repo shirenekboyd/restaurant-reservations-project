@@ -126,7 +126,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
 
       await page.click(finishButtonSelector);
 
-      await page.waitForTimeout(1000);
+      //await page.waitForTimeout(1000);
 
       await page.screenshot({
         path: ".screenshots/us-05-dashboard-finish-button-cancel-after.png",

@@ -4,6 +4,7 @@ import { listReservation, listTable, finishTable, updateStatus } from "../utils/
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import Finish from "./Finish";
+import Cancel from "../reservations/Cancel"
 
 import Tables from "./Tables";
 
@@ -35,7 +36,7 @@ function Dashboard({ date }) {
 
   const [reservations, setReservations] = useState([]);
   // const [reservationsError, setReservationsError] = useState(null);
-  const [tables, setTables] = useState([]);
+  const [tables, setTables] = useState(null);
   const [errors, setErrors] = useState(null);
 
   useEffect(loadDashboard, [date]);
@@ -49,6 +50,8 @@ function Dashboard({ date }) {
       .catch(setErrors);
     return () => abortController.abort();
   }
+
+
   function loadTables() {
     const abortController = new AbortController();
     setErrors(null);
@@ -77,6 +80,7 @@ function Dashboard({ date }) {
   function onFinish(table_id, reservation_id) {
     finishTable(table_id, reservation_id)
       .then(loadDashboard)
+      .then(loadTables)
   }
 
   const reservationsTable = reservations.map((reservation) => {
@@ -90,7 +94,7 @@ function Dashboard({ date }) {
         <td>{formatAsDate(reservation.reservation_date)}</td>
         <td>{formatAsTime(reservation.reservation_time)}</td>
         <td>{reservation.people}</td>
-        <td>{reservation.status}</td>
+        <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
         <td>
           {reservation.status === "booked" ? (
             <div>
@@ -115,6 +119,7 @@ function Dashboard({ date }) {
               >
                 Edit
               </a>
+              <Cancel reservation_id={reservation.reservation_id}/>
             </div>
           ) : null}
         </td>
@@ -174,7 +179,7 @@ function Dashboard({ date }) {
         </div> */}
 
         <div>
-          <Tables onFinish={onFinish} tables={tables} />
+          {tables && <Tables onFinish={onFinish} tables={tables} />}
         </div>
 
         <div className="btn-group" role="group" aria-label="Basic example">
