@@ -29,17 +29,19 @@ function Tables({ onFinish, tables = [] }) {
           <td>{table.table_name}</td>
           <td>{table.capacity}</td>
           <td data-table-id-status={table.table_id}>
-            {table.reservation_id === "Occupied" ? (
-              //  ("Occupied")
-              <button
-                type="button"
-                className="btn btn-outline-info"
-                data-table-id-finish={table.table_id}
-                data-reservation-id-finish={table.reservation_id}
-                onClick={finishHandler}
-              >
-                Finish
-              </button>
+            {table.reservation_id ? (
+              <div>
+                Occupied
+                <button
+                  type="button"
+                  className="btn btn-outline-info"
+                  data-table-id-finish={table.table_id}
+                  data-reservation-id-finish={table.reservation_id}
+                  onClick={finishHandler}
+                >
+                  Finish
+                </button>
+              </div>
             ) : (
               "Free"
             )}
