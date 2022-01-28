@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
-import ErrorAlert from "./ErrorAlert";
-function Form() {
-  const initialState = {
-    "first_name": "",
-    "last_name": "",
-    "mobile_number": "",
-    "reservation_date": "",
-    "reservation_time": "",
-    "people": 0,
-  };
+
+
+function Form({submitHandler, initialState = {
+  first_name: "",
+  last_name: "",
+  mobile_number: "",
+  reservation_date: "",
+  reservation_time: "12:00",
+  people: 1,}}) { 
+
   const history = useHistory();
-  const [error, setError] = useState(null);
+
   const [reservation, setReservation] = useState(initialState);
   function changeHandler({ target: { name, value } }) {
     setReservation((prevState) => ({
@@ -20,32 +19,17 @@ function Form() {
       [name]: value,
     }));
   }
-  function submitHandler(e) {
-    reservation.people = Number(reservation.people)
-      e.preventDefault();
-      let abortController = new AbortController();
-      async function newReservation() {
-        try {
-          await createReservation(reservation, abortController.signal)
-          let date = reservation.reservation_date
-          setReservation(initialState)
-          history.push(`/dashboard?date=${date}`)
-        } catch (error) {
-          setError(error);
-        }
-      }
-      newReservation();
-      return () => {
-        abortController.abort();
-      };
-    }
-
+  
+  function handleSubmit(e) {
+    reservation.people = Number(reservation.people);
+    e.preventDefault();
+    submitHandler(reservation);
+    
+  }
 
   return (
     <div>
-      <ErrorAlert error={error} />
-      <h1>Create Reservation</h1>
-      <form onSubmit={(e) => submitHandler(e)}>
+      <form onSubmit={handleSubmit}>
         <div className="row">
           <div>
             <div className="col">
@@ -60,7 +44,7 @@ function Form() {
                 placeholder="First Name"
                 aria-label="First Name"
                 value={reservation.first_name}
-                onChange={(e) => changeHandler(e)}
+                onChange={changeHandler}
               />
             </div>
           </div>
@@ -75,7 +59,7 @@ function Form() {
               placeholder="Last Name"
               aria-label="Last Name"
               value={reservation.last_name}
-              onChange={(e) => changeHandler(e)}
+              onChange={changeHandler}
             />
           </div>
           <div>
@@ -91,7 +75,7 @@ function Form() {
                 placeholder="Mobile Number"
                 aria-label="Mobile Number"
                 value={reservation.mobile_number}
-                onChange={(e) => changeHandler(e)}
+                onChange={changeHandler}
               />
             </div>
           </div>
@@ -111,7 +95,7 @@ function Form() {
                 placeholder="Date"
                 aria-label="Date"
                 value={reservation.reservation_date}
-                onChange={(e) => changeHandler(e)}
+                onChange={changeHandler}
               />
             </div>
           </div>
@@ -128,7 +112,7 @@ function Form() {
                 placeholder="Time"
                 aria-label="Time"
                 value={reservation.reservation_time}
-                onChange={(e) => changeHandler(e)}
+                onChange={changeHandler}
               />
             </div>
           </div>
@@ -145,7 +129,7 @@ function Form() {
                 className="form-control"
                 aria-label="People"
                 value={reservation.people}
-                onChange={(e) => changeHandler(e)}
+                onChange={changeHandler}
               />
             </div>
           </div>
@@ -159,7 +143,9 @@ function Form() {
           Cancel
         </button>
         {/*Submit button when clicked saves the new reservation, then displays the /dashboard page for the date of the new reservation */}
-        <button className="btn btn-primary" type="submit" value="Submit">Submit</button>
+        <button className="btn btn-primary" type="submit" value="Submit">
+          Submit
+        </button>
       </form>
     </div>
   );

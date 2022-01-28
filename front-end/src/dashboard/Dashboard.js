@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservation, listTable, updateStatus } from "../utils/api";
+import { listReservation, listTable, finishTable, updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import useQuery from "../utils/useQuery";
 import Finish from "./Finish";
-import Edit from "../edit/Edit";
+
+import Tables from "./Tables";
+
 //import {formatTime} from "../utils/format-reservation-time";
 //import formatAsDate from "../utils/format-reservation-date";
 import {
@@ -72,10 +74,15 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  function onFinish(table_id, reservation_id) {
+    finishTable(table_id, reservation_id)
+      .then(loadDashboard)
+  }
+
   const reservationsTable = reservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
-      <tr>
+      <tr key={reservation_id}>
         <td scope="row">{reservation_id}</td>
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>
@@ -87,7 +94,6 @@ function Dashboard({ date }) {
         <td>
           {reservation.status === "booked" ? (
             <div>
-            
               <button
                 // onClick={(e) =>
                 //   statusChanger(reservation.reservation_id, "seated")
@@ -96,20 +102,20 @@ function Dashboard({ date }) {
                 className="btn btn-light"
               >
                 <a
-              className="btn btn-primary"
-              href={`/reservations/${reservation.reservation_id}/seat`}
-            >
-                Seat
-                </a>  
+                  className="btn btn-primary"
+                  href={`/reservations/${reservation.reservation_id}/seat`}
+                >
+                  Seat
+                </a>
               </button>
-              
+
               <a
                 className="btn btn-primary"
                 href={`/reservations/${reservation.reservation_id}/edit`}
               >
                 Edit
               </a>
-              </div>
+            </div>
           ) : null}
         </td>
       </tr>
@@ -117,18 +123,18 @@ function Dashboard({ date }) {
   });
 
   //include within the function below "Free" or "Occupied" depending on whether a reservation is seated at the table.
-  const displayTables = tables.map((table, index) => {
-    return (
-      <tr key={index}>
-        <th scope="row">{table.table_id}</th>
-        <td>{table.table_name}</td>
-        <td>{table.capacity}</td>
-        <td data-table-id-status={table.table_id}>
-          {table.reservation_id ? <Finish table_id={table.table_id} /> : "Free"}
-        </td>
-      </tr>
-    );
-  });
+  // const displayTables = tables.map((table) => {
+  //   return (
+  //     <tr key={table.table_id}>
+  //       <th scope="row">{table.table_id}</th>
+  //       <td>{table.table_name}</td>
+  //       <td>{table.capacity}</td>
+  //       <td data-table-id-status={table.table_id}>
+  //         {table.reservation_id ? <Finish table_id={table.table_id} /> : "Free"}
+  //       </td>
+  //     </tr>
+  //   );
+  // });
 
   return (
     <main className="min-h-screen m-12">
@@ -150,10 +156,10 @@ function Dashboard({ date }) {
                 <th scope="col"></th>
               </tr>
             </thead>
-            {reservationsTable}
+            <tbody>{reservationsTable}</tbody>
           </table>
         </div>
-        <div className="p-2">
+        {/* <div className="p-2">
           <table className="table">
             <thead className="thead-dark">
               <tr>
@@ -163,9 +169,14 @@ function Dashboard({ date }) {
                 <th scope="col">Free?</th>
               </tr>
             </thead>
-            {displayTables}
+            <tbody>{displayTables}</tbody>
           </table>
+        </div> */}
+
+        <div>
+          <Tables onFinish={onFinish} tables={tables} />
         </div>
+
         <div className="btn-group" role="group" aria-label="Basic example">
           <button
             onClick={() => handleClick(previous(date))}
@@ -197,3 +208,56 @@ function Dashboard({ date }) {
 }
 
 export default Dashboard;
+
+// import React, { useEffect, useState } from "react";
+// import { listReservation, listTable, finishTable, cancelReservation } from "../utils/api";
+// import ErrorAlert from "../layout/ErrorAlert";
+// import Reservations from "./Reservations";
+// import Tables from "./Tables";
+
+// function Dashboard({ date }) {
+//   const [reservations, setReservations] = useState([]);
+//   const [reservationsError, setReservationsError] = useState(null);
+//   const [tables, setTables] = useState([]);
+
+//   useEffect(loadDashboard, [date]);
+
+//   function loadDashboard() {
+//     const abortController = new AbortController();
+//     setReservationsError(null);
+//     listReservation({ date }, abortController.signal)
+//       .then(setReservations)
+//       .catch(setReservationsError);
+
+//     listTable().then(setTables)
+//     return () => abortController.abort();
+//   }
+
+//   function onCancel(reservation_id) {
+//     cancelReservation(reservation_id)
+//       .then(loadDashboard)
+//       .catch(setReservationsError);
+//   }
+
+//   function onFinish(table_id, reservation_id) {
+//     finishTable(table_id, reservation_id)
+//       .then(loadDashboard)
+//   }
+
+//   return (
+//     <main>
+//       <h1>Dashboard</h1>
+//       <div className="d-md-flex mb-3">
+//         <h4 className="mb-0">Reservations</h4>
+//       </div>
+//       <ErrorAlert error={reservationsError} />
+//       <Reservations reservations={reservations} onCancel={onCancel} />
+//       <div className="d-md-flex mb-3">
+//         <h4 className="mb-0">Tables</h4>
+//       </div>
+//       <Tables onFinish={onFinish} tables={tables} />
+//     </main>
+//   );
+// }
+
+// export default Dashboard;

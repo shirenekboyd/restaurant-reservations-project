@@ -1,4 +1,4 @@
-import Form from "../layout/Form";
+import Form from "./Form";
 import ErrorAlert from "../layout/ErrorAlert";
 import { useParams, useHistory } from "react-router-dom";
 import { useEffect } from "react";
@@ -7,8 +7,8 @@ import { formatAsDate } from "../utils/date-time";
 import { getReservation, updateReservation } from "../utils/api";
 
 function Edit() {
-  const [reservation_id] = useParams();
-  const [reservation, setReservation] = useState(null);
+  const {reservation_id} = useParams();
+  const [reservation, setReservation] = useState("");
   const [error, setError] = useState(null);
   const history = useHistory();
 
@@ -37,9 +37,9 @@ function Edit() {
   }
 
   //may need to add this conditional
-  //if(reservation) {
-  //reservation.reservation_date = formatAsDate(reservation.reservation_date);
-  //}
+  if(reservation) {
+  reservation.reservation_date = formatAsDate(reservation.reservation_date);
+  }
 
   return (
     <div>

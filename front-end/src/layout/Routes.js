@@ -4,11 +4,12 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
-import Form from "./Form";
+import Form from "../reservations/Form";
 import CreateTables from "../tables/CreateTables";
-import Seat from "../tables/Seat";
+import Seat from "../reservations/Seat";
 import Search from "../search/Search";
-import Edit from "../edit/Edit";
+import Edit from "../reservations/Edit";
+import CreateReservations from "../reservations/CreateReservations";
 
 /**
  * Defines all the routes for the application.
@@ -23,23 +24,23 @@ function Routes() {
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
       </Route>
-      <Route exact={true} path="/reservations">
-        <Redirect to={"/dashboard"} />
-      </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />
       </Route>
-      <Route path="/reservations/new">
-        <Form />
+      <Route exact={true} path="/reservations">
+        <Redirect to={"/dashboard"} />
       </Route>
-      <Route exact={true} path="/tables/new">
-        <CreateTables />
+      <Route path="/reservations/new">
+        <CreateReservations />
       </Route>
       <Route exact={true} path="/reservations/:reservation_id/seat">
         <Seat />
       </Route>
       <Route exact={true} path="/reservations/:reservation_id/edit">
         <Edit />
+      </Route>
+      <Route exact={true} path="/tables/new">
+        <CreateTables />
       </Route>
       <Route exact={true} path="/search">
         <Search />
