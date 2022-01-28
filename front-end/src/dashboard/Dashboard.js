@@ -66,9 +66,9 @@ function Dashboard({ date }) {
     pushDate(nextOrPrev);
   }
 
-  function statusChanger(reservation_id, status) {
+  function statusChanger(reservation_id, status) { //may need async here
     const abortController = new AbortController();
-    updateStatus(reservation_id, status, abortController.signal).catch(
+    updateStatus(reservation_id, status, abortController.signal).catch( //may need await here
       setErrors
     );
     return () => abortController.abort();

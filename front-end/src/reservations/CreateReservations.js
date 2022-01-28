@@ -27,7 +27,6 @@ function CreateReservations() {
   return (
     <div>
       <ErrorAlert error={error} />
-
       <h1>Create a reservation</h1>
       <Form submitHandler={submitHandler} />
     </div>
