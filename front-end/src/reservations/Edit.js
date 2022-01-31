@@ -7,7 +7,7 @@ import { formatAsDate } from "../utils/date-time";
 import { getReservation, updateReservation } from "../utils/api";
 
 function Edit() {
-  const {reservation_id} = useParams();
+  const { reservation_id } = useParams();
   const [reservation, setReservation] = useState("");
   const [error, setError] = useState(null);
   const history = useHistory();
@@ -36,9 +36,8 @@ function Edit() {
       .catch(setError);
   }
 
-  //may need to add this conditional
-  if(reservation) {
-  reservation.reservation_date = formatAsDate(reservation.reservation_date);
+  if (reservation) {
+    reservation.reservation_date = formatAsDate(reservation.reservation_date);
   }
 
   return (

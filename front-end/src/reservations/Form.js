@@ -1,30 +1,31 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-
-function Form({submitHandler, initialState = {
-  first_name: "",
-  last_name: "",
-  mobile_number: "",
-  reservation_date: "",
-  reservation_time: "12:00",
-  people: 1,}}) { 
-
+function Form({
+  submitHandler,
+  initialState = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "12:00",
+    people: 1,
+  },
+}) {
   const history = useHistory();
-
   const [reservation, setReservation] = useState(initialState);
+
   function changeHandler({ target: { name, value } }) {
     setReservation((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   }
-  
+
   function handleSubmit(e) {
     reservation.people = Number(reservation.people);
     e.preventDefault();
     submitHandler(reservation);
-    
   }
 
   return (
@@ -80,7 +81,6 @@ function Form({submitHandler, initialState = {
             </div>
           </div>
         </div>
-
         <div className="row">
           <div>
             <div className="col">
@@ -134,7 +134,6 @@ function Form({submitHandler, initialState = {
             </div>
           </div>
         </div>
-        {/*Cancel button when clicked returns the user to the previous page */}
         <button
           onClick={() => history.goBack()}
           type="button"
@@ -142,8 +141,11 @@ function Form({submitHandler, initialState = {
         >
           Cancel
         </button>
-        {/*Submit button when clicked saves the new reservation, then displays the /dashboard page for the date of the new reservation */}
-        <button className="btn btn-outline-success" type="submit" value="Submit">
+        <button
+          className="btn btn-outline-success"
+          type="submit"
+          value="Submit"
+        >
           Submit
         </button>
       </form>

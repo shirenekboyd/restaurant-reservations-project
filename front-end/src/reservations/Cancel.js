@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
-//import { readReservation } from "../utils/api";
-import {cancelReservation} from "../utils/api";
+//import { useHistory } from "react-router";
+import { cancelReservation } from "../utils/api";
 
-function Cancel({reservation_id, loadDashboard}) {
-  const history = useHistory();
+function Cancel({ reservation_id, loadDashboard }) {
+  //const history = useHistory();
 
   async function handleClick(e) {
     if (

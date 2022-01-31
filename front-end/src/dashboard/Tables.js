@@ -1,9 +1,6 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-// import { deleteTable } from "../utils/api";
 
 function Tables({ onFinish, tables = [] }) {
-  const history = useHistory();
   async function finishHandler({
     target: { dataset: { tableIdFinish, reservationIdFinish } } = {},
   }) {
@@ -15,7 +12,6 @@ function Tables({ onFinish, tables = [] }) {
       )
     ) {
       await onFinish(tableIdFinish, reservationIdFinish);
-      //history.push("/");
     }
   }
 

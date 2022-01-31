@@ -28,8 +28,6 @@ function update(reservation_id, status) {
     .then((res) => res[0]);
 }
 
-//may need to add another update for updating a reservation???
-
 function search(mobile_number) {
   return knex("reservations")
     .whereRaw(

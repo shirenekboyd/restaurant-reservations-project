@@ -4,49 +4,47 @@ import { createTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 function CreateTables() {
-    const initialState = {
-        "table_name": "",
-        "capacity": 0,
-      };
-      const history = useHistory();
-      const [error, setError] = useState(null);
-      const [table, setTable] = useState(initialState);
+  const initialState = {
+    table_name: "",
+    capacity: 0,
+  };
+  const history = useHistory();
+  const [error, setError] = useState(null);
+  const [table, setTable] = useState(initialState);
 
-      function changeHandler({ target: { name, value } }) {
-        setTable((prevState) => ({
-          ...prevState,
-          [name]: value,
-        }));
+  function changeHandler({ target: { name, value } }) {
+    setTable((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+  function submitHandler(e) {
+    table.capacity = Number(table.capacity);
+    e.preventDefault();
+    let abortController = new AbortController();
+    async function newTable() {
+      try {
+        await createTable(table, abortController.signal);
+        setTable(initialState);
+        history.push(`/dashboard`);
+      } catch (error) {
+        setError(error);
       }
-      function submitHandler(e) {
-        //console.log(reservation)
-        table.capacity = Number(table.capacity)
-        e.preventDefault();
-        let abortController = new AbortController();
-        async function newTable() {
-          try {
-            await createTable(table, abortController.signal)
-            //let date = reservation.reservation_date
-            setTable(initialState)
-            history.push(`/dashboard`)
-          } catch (error) {
-            setError(error);
-          }
-        }
-        newTable();
-        return () => {
-          abortController.abort();
-        };
-      }
-  
-    return (
+    }
+    newTable();
+    return () => {
+      abortController.abort();
+    };
+  }
+
+  return (
     <div>
       <ErrorAlert error={error} />
       <form className="form w-full max-w-lg" onSubmit={(e) => submitHandler(e)}>
         <h1>Create Table</h1>
-      <p className="text-red-500 text-xs italic">
-              Please fill out these fields.
-            </p>
+        <p className="text-red-500 text-xs italic">
+          Please fill out these fields.
+        </p>
         <div className="flex flex-wrap mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
@@ -66,7 +64,6 @@ function CreateTables() {
               onChange={(e) => changeHandler(e)}
               required
             />
-            
           </div>
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
@@ -95,8 +92,14 @@ function CreateTables() {
         >
           Cancel
         </button>
-       
-        <button className="btn btn-outline-success" type="submit" value="Submit">Submit</button>
+
+        <button
+          className="btn btn-outline-success"
+          type="submit"
+          value="Submit"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

@@ -5,7 +5,6 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 function hasValidFields(req, res, next) {
   const { data = {} } = req.body;
   const validFields = new Set(["table_name", "capacity", "reservation_id"]);
-
   const invalidFields = Object.keys(data).filter(
     (field) => !validFields.has(field)
   );
@@ -65,7 +64,6 @@ function isValidNumber(req, res, next) {
 
 async function list(req, res) {
   const data = await service.list(req.query.date);
-
   res.json({
     data,
   });
@@ -152,7 +150,6 @@ function isBooked(req, res, next) {
   if (res.locals.reservation.status === "booked") {
     next();
   } else {
-    // if it is seated:
     next({
       status: 400,
       message: `Reservation is ${res.locals.reservation.status}.`,

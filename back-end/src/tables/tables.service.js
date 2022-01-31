@@ -1,5 +1,4 @@
 const knex = require("../db/connection");
-
 const tableName = "tables"
 
 // list by date

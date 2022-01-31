@@ -13,17 +13,15 @@ function CreateReservations() {
     try {
       await createReservation(reservation, abortController.signal);
       let date = reservation.reservation_date;
-
       history.push(`/dashboard?date=${date}`);
     } catch (error) {
       setError(error);
     }
-
     return () => {
       abortController.abort();
     };
   }
-  console.log("my error", error);
+
   return (
     <div>
       <ErrorAlert error={error} />

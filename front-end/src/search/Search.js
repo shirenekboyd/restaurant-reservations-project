@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { search, updateStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-//import Dashboard from "../dashboard/Dashboard";
-//import add something here for displaying reservations
 import { formatAsTime, formatAsDate } from "../utils/date-time";
 
 function Search() {
   const [number, setNumber] = useState("");
-
   const [error, setError] = useState("");
   const [reservations, setReservations] = useState([]);
 
@@ -45,20 +42,10 @@ function Search() {
     }
   }
 
-  // function statusChanger(reservation_id, status) {
-  //   const abortController = new AbortController();
-  //   updateStatus(reservation_id, status, abortController.signal).catch(
-  //     setErrors
-  //   );
-  //   return () => abortController.abort();
-  // }
-
-
-  //console.log(reservations);
   const reservationsTable = reservations.map((reservation) => {
     const { reservation_id } = reservation;
     return (
-      <tr>
+      <tr key={reservation.reservation_id}>
         <td scope="row">{reservation_id}</td>
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>
@@ -69,16 +56,18 @@ function Search() {
         <td>{reservation.status}</td>
         <td>
           <a
-            className="btn btn-primary"
+            className="btn btn-outline-warning"
             href={`/reservations/${reservation.reservation_id}/edit`}
           >
             Edit
           </a>
-        <button
+          <button
             className="btn btn-primary"
-            onClick={(e) => handleClick(reservation.reservation_id, "cancelled")}
+            onClick={(e) =>
+              handleClick(reservation.reservation_id, "cancelled")
+            }
             type="button"
-            className="btn btn-light"
+            className="btn btn-outline-danger"
             data-reservation-id-cancel={reservation.reservation_id}
           >
             Cancel
@@ -88,7 +77,6 @@ function Search() {
     );
   });
 
-  //console.log(reservations);
   return (
     <div>
       <h1>Search here</h1>
@@ -113,7 +101,6 @@ function Search() {
       <ErrorAlert error={error} />
       {reservations.length > 0 ? (
         <table className="table">
-          {reservationsTable}
           <thead className="thead-dark">
             <tr>
               <th scope="col">#</th>
@@ -127,6 +114,7 @@ function Search() {
               <th scope="col"></th>
             </tr>
           </thead>
+          <tbody>{reservationsTable}</tbody>
         </table>
       ) : null}
     </div>
