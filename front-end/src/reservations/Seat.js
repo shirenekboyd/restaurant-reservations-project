@@ -142,8 +142,8 @@ function Seat() {
               </select>
             </div>
           </div>
-          <button type="button" className="btn btn-secondary m-2" onClick={() => history.goBack()}>Cancel</button>
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="button" className="btn btn-outline-danger m-2" onClick={() => history.goBack()}>Cancel</button>
+          <button type="submit" className="btn btn-outline-success">Submit</button>
         </fieldset>
       </form>
     </main>

@@ -138,12 +138,12 @@ function Form({submitHandler, initialState = {
         <button
           onClick={() => history.goBack()}
           type="button"
-          className="btn btn-secondary m-2"
+          className="btn btn-outline-danger m-2"
         >
           Cancel
         </button>
         {/*Submit button when clicked saves the new reservation, then displays the /dashboard page for the date of the new reservation */}
-        <button className="btn btn-primary" type="submit" value="Submit">
+        <button className="btn btn-outline-success" type="submit" value="Submit">
           Submit
         </button>
       </form>

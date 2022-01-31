@@ -78,7 +78,7 @@ function Search() {
             className="btn btn-primary"
             onClick={(e) => handleClick(reservation.reservation_id, "cancelled")}
             type="button"
-            class="btn btn-light"
+            className="btn btn-light"
             data-reservation-id-cancel={reservation.reservation_id}
           >
             Cancel
@@ -105,7 +105,7 @@ function Search() {
             placeholder="Enter a phone number"
             onChange={changeHandler}
           />
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-outline-primary m-2">
             Find
           </button>
         </form>

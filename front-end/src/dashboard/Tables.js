@@ -34,7 +34,7 @@ function Tables({ onFinish, tables = [] }) {
             {table.reservation_id ? (
               <button
                 type="button"
-                className="btn btn-outline-info"
+                className="btn btn-outline-dark"
                 data-table-id-finish={table.table_id}
                 data-reservation-id-finish={table.reservation_id}
                 onClick={finishHandler}

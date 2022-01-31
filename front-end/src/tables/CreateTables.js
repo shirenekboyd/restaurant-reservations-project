@@ -43,39 +43,42 @@ function CreateTables() {
     <div>
       <ErrorAlert error={error} />
       <form className="form w-full max-w-lg" onSubmit={(e) => submitHandler(e)}>
+        <h1>Create Table</h1>
+      <p className="text-red-500 text-xs italic">
+              Please fill out these fields.
+            </p>
         <div className="flex flex-wrap mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="grid-first-name"
+              htmlFor="table_name"
             >
               Table Name
             </label>
             <input
               name="table_name"
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="table_name-"
+              className="form-control"
+              id="table_name"
               type="text"
               value={table.table_name}
               placeholder="Table Name"
+              aria-label="Table Name"
               onChange={(e) => changeHandler(e)}
               required
             />
-            <p className="text-red-500 text-xs italic">
-              Please fill out this field.
-            </p>
+            
           </div>
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="grid-last-name"
+              htmlFor="capacity"
             >
               Capacity
             </label>
             <input
               name="capacity"
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="last-name"
+              className="form-control"
+              id="capacity"
               type="number"
               min="1"
               value={table.capacity}
@@ -88,12 +91,12 @@ function CreateTables() {
         <button
           onClick={() => history.goBack()}
           type="button"
-          className="btn btn-secondary m-2"
+          className="btn btn-outline-danger m-2"
         >
           Cancel
         </button>
        
-        <button className="btn btn-primary" type="submit" value="Submit">Submit</button>
+        <button className="btn btn-outline-success" type="submit" value="Submit">Submit</button>
       </form>
     </div>
   );

@@ -82,6 +82,9 @@ function Dashboard({ date }) {
       .then(loadDashboard)
       .then(loadTables)
   }
+// let filteredReservations = reservations.filter((reservation) => {
+//   return reservation.status !== "finished" && reservation.status
+// !== "cancelled"})
 
   const reservationsTable = reservations.map((reservation) => {
     const { reservation_id } = reservation;
@@ -103,10 +106,10 @@ function Dashboard({ date }) {
                 //   statusChanger(reservation.reservation_id, "seated")
                 // }
                 type="button"
-                className="btn btn-light"
+                className="btn btn-outline-success m-2"
               >
                 <a
-                  className="btn btn-primary"
+                  //className="btn btn-outline-success"
                   href={`/reservations/${reservation.reservation_id}/seat`}
                 >
                   Seat
@@ -114,7 +117,7 @@ function Dashboard({ date }) {
               </button>
 
               <a
-                className="btn btn-primary"
+                className="btn btn-outline-warning m-2"
                 href={`/reservations/${reservation.reservation_id}/edit`}
               >
                 Edit
@@ -186,21 +189,21 @@ function Dashboard({ date }) {
           <button
             onClick={() => handleClick(previous(date))}
             type="button"
-            className="btn btn-dark"
+            className="btn btn-outline-info"
           >
             Previous
           </button>
           <button
             onClick={() => history.push(`/dashboard`)}
             type="button"
-            className="btn btn-dark"
+            className="btn btn-outline-info"
           >
             Today
           </button>
           <button
             onClick={() => handleClick(next(date))}
             type="button"
-            className="btn btn-dark"
+            className="btn btn-outline-info"
           >
             Next
           </button>

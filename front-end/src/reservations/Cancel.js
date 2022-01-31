@@ -24,7 +24,7 @@ function Cancel({reservation_id}) {
       onClick={(e) => handleClick(e)}
       reservation-id-cancel={reservation_id}
       type="button"
-      className="btn btn-light"
+      className="btn btn-outline-danger"
     >
       Cancel
     </button>

@@ -4,14 +4,10 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 //Validation
 function hasValidFields(req, res, next) {
   const { data = {} } = req.body;
-  const validFields = new Set([
-    "table_name",
-    "capacity",
-    "reservation_id",
-  ]);
+  const validFields = new Set(["table_name", "capacity", "reservation_id"]);
 
   const invalidFields = Object.keys(data).filter(
-    field => !validFields.has(field)
+    (field) => !validFields.has(field)
   );
 
   if (invalidFields.length)
@@ -24,15 +20,15 @@ function hasValidFields(req, res, next) {
 
 function hasTableId(req, res, next) {
   const table = req.params.table_id;
-  console.log(table);
-  if(table){
-      res.locals.reservation = table;
-      next();
+
+  if (table) {
+    res.locals.reservation = table;
+    next();
   } else {
-      next({
-          status: 400,
-          message: `missing table_id`,
-      });
+    next({
+      status: 400,
+      message: `missing table_id`,
+    });
   }
 }
 
@@ -49,20 +45,20 @@ function bodyDataHas(propertyName) {
 const has_table_name = bodyDataHas("table_name");
 const has_capacity = bodyDataHas("capacity");
 
-function isValidTableName(req, res, next){
+function isValidTableName(req, res, next) {
   const { data = {} } = req.body;
-  if (data['table_name'].length < 2){
-      return next({ status: 400, message: `table_name length is too short.` });
+  if (data["table_name"].length < 2) {
+    return next({ status: 400, message: `table_name length is too short.` });
   }
   next();
 }
 
-function isValidNumber(req, res, next){
+function isValidNumber(req, res, next) {
   const { data = {} } = req.body;
-  if ('capacity' in data){
-      if (data['capacity'] === 0 || !Number.isInteger(data['capacity'])){
-          return next({ status: 400, message: `capacity must be a number.` });
-      }
+  if ("capacity" in data) {
+    if (data["capacity"] === 0 || !Number.isInteger(data["capacity"])) {
+      return next({ status: 400, message: `capacity must be a number.` });
+    }
   }
   next();
 }
@@ -86,13 +82,13 @@ async function read(req, res) {
   const data = res.locals.reservation;
   res.status(200).json({
     data,
-  })
+  });
 }
 
 function hasCapacity(req, res, next) {
   const tableCapacity = res.locals.table.capacity;
   const guests = res.locals.reservation.people;
-  if ( tableCapacity < guests ) {
+  if (tableCapacity < guests) {
     next({
       status: 400,
       message: `Too many guests ( ${guests} ) for table size. Please choose table with capacity.`,
@@ -103,7 +99,10 @@ function hasCapacity(req, res, next) {
 }
 
 async function seat(req, res) {
-  const data = await service.seat(res.locals.table.table_id, res.locals.reservation.reservation_id);
+  const data = await service.seat(
+    res.locals.table.table_id,
+    res.locals.reservation.reservation_id
+  );
   res.json({
     data,
   });
@@ -132,10 +131,7 @@ function isOccupied(req, res, next) {
 }
 
 async function occupy(req, res) {
-    //console.log("DEBUG FINISH");
-    console.log(res.locals.table);
   const data = await service.occupy(res.locals.table);
-
   res.json({
     data,
   });
@@ -165,16 +161,15 @@ function isBooked(req, res, next) {
 }
 module.exports = {
   create: [
-      has_table_name,
-      has_capacity,
-      isValidTableName,
-      isValidNumber,
-     hasValidFields,
-      asyncErrorBoundary(create)
+    has_table_name,
+    has_capacity,
+    isValidTableName,
+    isValidNumber,
+    hasValidFields,
+    asyncErrorBoundary(create),
   ],
   read: [hasTableId, asyncErrorBoundary(read)],
   list: [asyncErrorBoundary(list)],
   seat: [tableExists, isAvailable, hasCapacity, isBooked, seat],
-  occupy: [tableExists, isOccupied, occupy]
+  occupy: [tableExists, isOccupied, occupy],
 };
-  
