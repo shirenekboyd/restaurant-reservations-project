@@ -167,7 +167,6 @@ function Dashboard({ date }) {
         </div>
       </div>
       <ErrorAlert error={errors} />
-      {JSON.stringify(reservations)}
     </main>
   );
 }
