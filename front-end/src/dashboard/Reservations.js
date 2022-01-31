@@ -5,6 +5,7 @@ function Reservations({onCancel, reservations = [] }) {
   function cancelHandler({
       target: { dataset: { reservationIdCancel } } = {},
   }) {
+    console.log(reservationIdCancel)
       if (
         reservationIdCancel &&
         window.confirm(
@@ -29,8 +30,8 @@ function Reservations({onCancel, reservations = [] }) {
               <div className="col-sm-1">
                 <Link className="btn btn-outline-primary" to={`/reservations/${reservation.reservation_id}/seat`}>seat</Link>
                 <Link className="btn btn-outline-secondary" to={`/reservations/${reservation.reservation_id}/edit`}>edit</Link>
-                <Link className="btn btn-outline-info"  to={`/reservations/${reservation.reservation_id}/cancel`}>cancel</Link>
-                <button type="button" className="btn cancel" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelHandler}>Cancel</button>
+                {/* <Link className="btn btn-outline-info"  to={`/reservations/${reservation.reservation_id}/cancel`}>cancel</Link> */}
+                <button className="btn cancel" data-reservation-id-cancel={reservation.reservation_id} onClick={cancelHandler}>Cancel</button>
               </div>
           ) : ( "" )}
         </div>

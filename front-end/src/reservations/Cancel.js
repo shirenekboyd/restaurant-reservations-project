@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 //import { readReservation } from "../utils/api";
 import {cancelReservation} from "../utils/api";
 
-function Cancel({reservation_id}) {
+function Cancel({reservation_id, loadDashboard}) {
   const history = useHistory();
 
   async function handleClick(e) {
@@ -14,7 +14,8 @@ function Cancel({reservation_id}) {
     ) {
       const abortController = new AbortController();
       await cancelReservation(reservation_id, abortController.signal);
-      history.goBack();
+      //history.push("/");
+      await loadDashboard();
       return () => abortController.abort();
     }
   }
@@ -22,7 +23,7 @@ function Cancel({reservation_id}) {
   return (
     <button
       onClick={(e) => handleClick(e)}
-      reservation-id-cancel={reservation_id}
+      data-reservation-id-cancel={reservation_id}
       type="button"
       className="btn btn-outline-danger"
     >

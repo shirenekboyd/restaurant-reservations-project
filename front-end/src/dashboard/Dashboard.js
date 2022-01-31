@@ -122,7 +122,8 @@ function Dashboard({ date }) {
               >
                 Edit
               </a>
-              <Cancel reservation_id={reservation.reservation_id}/>
+              
+              <Cancel loadDashboard={loadDashboard} reservation_id={reservation.reservation_id}/>
             </div>
           ) : null}
         </td>
