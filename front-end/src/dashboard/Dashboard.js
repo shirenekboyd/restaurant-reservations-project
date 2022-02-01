@@ -18,7 +18,7 @@ import {
   formatAsDate,
 } from "../utils/date-time";
 
-/* Defines the dashboard page.
+/* Defines the dashboard page *.
  * @param date
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
