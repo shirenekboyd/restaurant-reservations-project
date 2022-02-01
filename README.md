@@ -5,7 +5,7 @@
 Thank you for looking at my project!
 
 ## Link to deployed app
-----insert link here-------
+https://sb-final-capstone-client.herokuapp.com/dashboard
 
 ## User Guide
 
